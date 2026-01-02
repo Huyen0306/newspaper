@@ -6,6 +6,11 @@ class PostModel {
   final List<String> tags;
   final int reactions;
 
+  // Computed properties
+  String get imageUrl => 'https://picsum.photos/seed/post$id/800/600';
+  String get author => _getFakeAuthor(userId);
+  String get date => _getFakeDate();
+
   PostModel({
     required this.id,
     required this.title,
@@ -14,6 +19,27 @@ class PostModel {
     required this.tags,
     required this.reactions,
   });
+
+  String _getFakeAuthor(int userId) {
+    const authors = [
+      'KTLA Los Angeles',
+      'The Independent',
+      'CNN News',
+      'BBC World',
+      'TechCrunch',
+      'The Verge',
+      'Reuters',
+      'Associated Press',
+    ];
+    return authors[userId % authors.length];
+  }
+
+  String _getFakeDate() {
+    final now = DateTime.now();
+    final daysAgo = id % 30; // Random days ago (0-29)
+    final date = now.subtract(Duration(days: daysAgo));
+    return '${date.day}/${date.month}/${date.year}';
+  }
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     // Handle reactions - can be int or Map
