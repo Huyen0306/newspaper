@@ -38,6 +38,7 @@ dependencies:
   iconsax: ^0.0.8
   confetti: ^0.8.0
   curved_navigation_bar: ^1.0.6
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:

@@ -6,7 +6,7 @@ class RewardsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFF2F2F7),
       body: const Center(
         child: Text(
           'Đổi thưởng',

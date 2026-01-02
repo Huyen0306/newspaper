@@ -42,7 +42,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
         color: Colors.white,
         buttonBackgroundColor: Colors.white,
-        backgroundColor: Colors.grey[100]!,
+        backgroundColor: const Color(0xFFF2F2F7),
         animationCurve: Curves.linear,
         animationDuration: const Duration(milliseconds: 350),
       ),
