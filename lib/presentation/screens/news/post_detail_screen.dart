@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:iconsax/iconsax.dart';
 import 'dart:async';
-import '../models/post_model.dart';
-import '../services/saved_posts_service.dart';
-import '../widgets/floating_reward_badge.dart';
+import '../../../data/models/post_model.dart';
+import '../../../data/services/saved_posts_service.dart';
+import '../../widgets/floating_reward_badge.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final PostModel post;

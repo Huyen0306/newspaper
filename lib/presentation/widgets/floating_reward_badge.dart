@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../services/task_service.dart';
-import '../services/points_service.dart';
+import '../../data/services/task_service.dart';
+import '../../data/services/points_service.dart';
 
 class FloatingRewardBadge extends StatefulWidget {
   const FloatingRewardBadge({super.key});

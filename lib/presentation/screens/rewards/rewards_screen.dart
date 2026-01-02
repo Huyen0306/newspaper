@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:iconsax/iconsax.dart';
-import '../models/reward_model.dart';
-import '../services/points_service.dart';
-import '../widgets/custom_app_bar.dart';
+import '../../../data/models/reward_model.dart';
+import '../../../data/services/points_service.dart';
+import '../../widgets/custom_app_bar.dart';
 
 class RewardsScreen extends StatefulWidget {
   const RewardsScreen({super.key});

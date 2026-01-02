@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'screens/main_screen.dart';
-import 'screens/login_screen.dart';
-import 'services/auth_service.dart';
+import 'presentation/screens/main/main_screen.dart';
+import 'presentation/screens/auth/login_screen.dart';
+import 'data/services/auth_service.dart';
 
 void main() {
   runApp(const MyApp());
@@ -60,12 +60,10 @@ class _MyAppState extends State<MyApp> {
       ),
       debugShowCheckedModeBanner: false,
       home: _isLoading
-          ? const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            )
+          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
           : _isLoggedIn
-              ? const MainScreen()
-              : const LoginScreen(),
+          ? const MainScreen()
+          : const LoginScreen(),
     );
   }
 }

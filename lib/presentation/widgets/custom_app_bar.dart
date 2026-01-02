@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../services/points_service.dart';
-import '../services/auth_service.dart';
+import '../../data/services/points_service.dart';
+import '../../data/services/auth_service.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;

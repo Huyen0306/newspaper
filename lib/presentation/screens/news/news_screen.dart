@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:iconsax/iconsax.dart';
-import '../models/post_model.dart';
-import '../services/post_service.dart';
-import '../services/saved_posts_service.dart';
-import '../core/utils/page_transitions.dart';
-import '../widgets/custom_app_bar.dart';
+import '../../../data/models/post_model.dart';
+import '../../../data/services/post_service.dart';
+import '../../../data/services/saved_posts_service.dart';
+import '../../../core/utils/page_transitions.dart';
+import '../../widgets/custom_app_bar.dart';
 import 'post_detail_screen.dart';
 
 class NewsScreen extends StatefulWidget {

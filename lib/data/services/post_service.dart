@@ -1,4 +1,4 @@
-import '../config/api_config.dart';
+import '../../core/network/api_config.dart';
 import '../models/post_model.dart';
 import 'api_service.dart';
 
@@ -6,7 +6,7 @@ class PostService {
   final ApiService _apiService;
 
   PostService({ApiService? apiService})
-      : _apiService = apiService ?? ApiService();
+    : _apiService = apiService ?? ApiService();
 
   // Get all posts
   Future<PostsResponse> getPosts({
@@ -33,9 +33,7 @@ class PostService {
 
   // Get single post
   Future<PostModel> getPostById(int id) async {
-    final response = await _apiService.get(
-      '${ApiConfig.postByIdEndpoint}/$id',
-    );
+    final response = await _apiService.get('${ApiConfig.postByIdEndpoint}/$id');
     return PostModel.fromJson(response.data);
   }
 
@@ -64,4 +62,3 @@ class PostService {
     return PostsResponse.fromJson(response.data);
   }
 }
-

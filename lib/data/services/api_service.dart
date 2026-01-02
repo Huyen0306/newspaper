@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import '../config/dio_config.dart';
+import '../../core/network/dio_config.dart';
 
 class ApiService {
   late final Dio _dio;
@@ -175,4 +175,3 @@ class ApiService {
     _dio.options.headers.remove('Authorization');
   }
 }
-

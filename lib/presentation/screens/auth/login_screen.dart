@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../models/user_model.dart';
-import '../services/auth_service.dart';
-import '../services/auth_api_service.dart';
-import 'main_screen.dart';
+import '../../../data/models/user_model.dart';
+import '../../../data/services/auth_service.dart';
+import '../../../data/services/auth_api_service.dart';
+import '../main/main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -73,9 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
         content: Text(message),
         backgroundColor: color,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -310,10 +308,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: const Text(
                     'Demo: emilys / emilyspass',
-                    style: TextStyle(
-                      color: Color(0xFF3C3C43),
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Color(0xFF3C3C43), fontSize: 12),
                   ),
                 ),
               ),
@@ -361,4 +356,3 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 }
-

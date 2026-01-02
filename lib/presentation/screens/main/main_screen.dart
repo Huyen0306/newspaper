@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:iconsax/iconsax.dart';
-import 'news_screen.dart';
-import 'saved_screen.dart';
-import 'rewards_screen.dart';
-import 'profile_screen.dart';
+import '../news/news_screen.dart';
+import '../saved/saved_screen.dart';
+import '../rewards/rewards_screen.dart';
+import '../profile/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
