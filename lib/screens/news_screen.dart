@@ -110,114 +110,118 @@ class _NewsScreenState extends State<NewsScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F7), // iOS systemGray6
       appBar: const CustomAppBar(title: 'Báo mới'),
-      body: _isLoading
-          ? const Center(child: CupertinoActivityIndicator(radius: 12))
-          : _errorMessage != null
-          ? Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFEBEE),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Iconsax.danger,
-                        size: 40,
-                        color: Color(0xFFD32F2F),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Đã xảy ra lỗi',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF1C1C1E),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      _errorMessage!,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: const Color(0xFF3C3C43).withOpacity(0.6),
-                        height: 1.4,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      onPressed: _loadPosts,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF007AFF),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 14,
+      body: Stack(
+        children: [
+          _isLoading
+              ? const Center(child: CupertinoActivityIndicator(radius: 12))
+              : _errorMessage != null
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFEBEE),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Iconsax.danger,
+                            size: 40,
+                            color: Color(0xFFD32F2F),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'Đã xảy ra lỗi',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1C1C1E),
+                          ),
                         ),
-                        elevation: 0,
+                        const SizedBox(height: 8),
+                        Text(
+                          _errorMessage!,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: const Color(0xFF3C3C43).withOpacity(0.6),
+                            height: 1.4,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: _loadPosts,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF007AFF),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 14,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: const Text(
+                            'Thử lại',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : _posts.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Iconsax.document_text,
+                        size: 64,
+                        color: const Color(0xFF3C3C43).withOpacity(0.3),
                       ),
-                      child: const Text(
-                        'Thử lại',
+                      const SizedBox(height: 16),
+                      Text(
+                        'Không có bài viết nào',
                         style: TextStyle(
                           fontSize: 17,
-                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF3C3C43).withOpacity(0.6),
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : _posts.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Iconsax.document_text,
-                    size: 64,
-                    color: const Color(0xFF3C3C43).withOpacity(0.3),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Không có bài viết nào',
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: const Color(0xFF3C3C43).withOpacity(0.6),
-                      fontWeight: FontWeight.w400,
+                )
+              : RefreshIndicator(
+                  onRefresh: () => _loadPosts(forceRefresh: true),
+                  color: const Color(0xFF007AFF),
+                  strokeWidth: 2.5,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
+                    itemCount: _posts.length,
+                    itemBuilder: (context, index) {
+                      return _PostCard(
+                        post: _posts[index],
+                        isSaved: _savedPostIds.contains(_posts[index].id),
+                        onSaveChanged: () => _loadSavedPostIds(),
+                      );
+                    },
                   ),
-                ],
-              ),
-            )
-          : RefreshIndicator(
-              onRefresh: () => _loadPosts(forceRefresh: true),
-              color: const Color(0xFF007AFF),
-              strokeWidth: 2.5,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
                 ),
-                itemCount: _posts.length,
-                itemBuilder: (context, index) {
-                  return _PostCard(
-                    post: _posts[index],
-                    isSaved: _savedPostIds.contains(_posts[index].id),
-                    onSaveChanged: () => _loadSavedPostIds(),
-                  );
-                },
-              ),
-            ),
+        ],
+      ),
     );
   }
 }

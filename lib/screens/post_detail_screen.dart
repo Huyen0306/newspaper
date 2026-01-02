@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:iconsax/iconsax.dart';
+import 'dart:async';
 import '../models/post_model.dart';
 import '../services/saved_posts_service.dart';
+import '../widgets/floating_reward_badge.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final PostModel post;
   final String? heroTagPrefix; // 'news' or 'saved'
 
-  const PostDetailScreen({
-    super.key,
-    required this.post,
-    this.heroTagPrefix,
-  });
+  const PostDetailScreen({super.key, required this.post, this.heroTagPrefix});
 
   @override
   State<PostDetailScreen> createState() => _PostDetailScreenState();
@@ -22,7 +20,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   final SavedPostsService _savedPostsService = SavedPostsService();
   late bool _isSaved;
   bool _isToggling = false;
-
   @override
   void initState() {
     super.initState();
@@ -52,7 +49,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   Future<void> _toggleSave() async {
     // Prevent multiple clicks
     if (_isToggling) return;
-    
+
     setState(() {
       _isToggling = true;
     });
@@ -114,8 +111,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
               color: _isToggling
                   ? const Color(0xFF3C3C43).withOpacity(0.3)
                   : _isSaved
-                      ? const Color(0xFF007AFF)
-                      : const Color(0xFF3C3C43).withOpacity(0.6),
+                  ? const Color(0xFF007AFF)
+                  : const Color(0xFF3C3C43).withOpacity(0.6),
             ),
             onPressed: _isToggling ? null : _toggleSave,
           ),
@@ -129,253 +126,271 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ),
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Hero Image
-                  Hero(
-                    tag: widget.heroTagPrefix != null
-                        ? '${widget.heroTagPrefix}_post_image_${widget.post.id}'
-                        : 'post_image_${widget.post.id}',
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 250,
-                      child: Image.network(
-                        widget.post.imageUrl,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            height: 250,
-                            color: const Color(0xFFF2F2F7),
-                            child: const Center(
-                              child: CupertinoActivityIndicator(radius: 12),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: 250,
-                            color: const Color(0xFFF2F2F7),
-                            child: const Icon(
-                              Iconsax.image,
-                              size: 64,
-                              color: Color(0xFF3C3C43),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  // Title
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    color: Colors.white,
-                    child: Text(
-                      widget.post.title,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        height: 1.3,
-                        letterSpacing: -0.3,
-                        color: Color(0xFF1C1C1E),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 1),
-                  // Author and Date
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Color(0xFFF2F2F7),
-                          child: Icon(
-                            Iconsax.profile_circle,
-                            size: 16,
-                            color: Color(0xFF3C3C43),
+          Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Hero Image
+                      Hero(
+                        tag: widget.heroTagPrefix != null
+                            ? '${widget.heroTagPrefix}_post_image_${widget.post.id}'
+                            : 'post_image_${widget.post.id}',
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 250,
+                          child: Image.network(
+                            widget.post.imageUrl,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                height: 250,
+                                color: const Color(0xFFF2F2F7),
+                                child: const Center(
+                                  child: CupertinoActivityIndicator(radius: 12),
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                height: 250,
+                                color: const Color(0xFFF2F2F7),
+                                child: const Icon(
+                                  Iconsax.image,
+                                  size: 64,
+                                  color: Color(0xFF3C3C43),
+                                ),
+                              );
+                            },
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          widget.post.author,
+                      ),
+                      // Title
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        color: Colors.white,
+                        child: Text(
+                          widget.post.title,
                           style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF3C3C43),
-                            fontSize: 13,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            height: 1.3,
+                            letterSpacing: -0.3,
+                            color: Color(0xFF1C1C1E),
                           ),
                         ),
-                        const Spacer(),
-                        Icon(
-                          Iconsax.clock,
-                          size: 14,
-                          color: const Color(0xFF3C3C43).withOpacity(0.5),
+                      ),
+                      const SizedBox(height: 1),
+                      // Author and Date
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
                         ),
-                        const SizedBox(width: 4),
-                        Text(
-                          widget.post.date,
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            const CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Color(0xFFF2F2F7),
+                              child: Icon(
+                                Iconsax.profile_circle,
+                                size: 16,
+                                color: Color(0xFF3C3C43),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              widget.post.author,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF3C3C43),
+                                fontSize: 13,
+                              ),
+                            ),
+                            const Spacer(),
+                            Icon(
+                              Iconsax.clock,
+                              size: 14,
+                              color: const Color(0xFF3C3C43).withOpacity(0.5),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              widget.post.date,
+                              style: TextStyle(
+                                color: const Color(0xFF3C3C43).withOpacity(0.6),
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 1),
+                      const Divider(height: 1),
+                      const SizedBox(height: 1),
+                      // Body content
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        color: Colors.white,
+                        child: Text(
+                          widget.post.body,
                           style: TextStyle(
-                            color: const Color(0xFF3C3C43).withOpacity(0.6),
-                            fontSize: 13,
+                            fontSize: 16,
+                            color: const Color(0xFF3C3C43).withOpacity(0.8),
+                            height: 1.6,
+                            letterSpacing: -0.2,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 1),
-                  const Divider(height: 1),
-                  const SizedBox(height: 1),
-                  // Body content
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20),
-                    color: Colors.white,
-                    child: Text(
-                      widget.post.body,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: const Color(0xFF3C3C43).withOpacity(0.8),
-                        height: 1.6,
-                        letterSpacing: -0.2,
-                        fontWeight: FontWeight.w400,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Tags section
-                  if (widget.post.tags.isNotEmpty)
-                    Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Tags',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF1C1C1E),
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: widget.post.tags.map((tag) {
-                        return Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
+                      const SizedBox(height: 12),
+                      // Tags section
+                      if (widget.post.tags.isNotEmpty)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(20),
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Tags',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF1C1C1E),
+                                  letterSpacing: -0.3,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: widget.post.tags.map((tag) {
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          const Color(
+                                            0xFF007AFF,
+                                          ).withOpacity(0.1),
+                                          const Color(
+                                            0xFF5856D6,
+                                          ).withOpacity(0.1),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: const Color(
+                                          0xFF007AFF,
+                                        ).withOpacity(0.2),
+                                        width: 0.5,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      '#$tag',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        color: Color(0xFF007AFF),
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0.2,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
                           ),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                const Color(0xFF007AFF).withOpacity(0.1),
-                                const Color(0xFF5856D6).withOpacity(0.1),
+                        ),
+                      const SizedBox(height: 12),
+                      // Footer info
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(20),
+                        color: Colors.white,
+                        child: Row(
+                          children: [
+                            // Reactions
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFF3B30).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Iconsax.heart,
+                                    size: 18,
+                                    color: Color(0xFFFF3B30),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    '${widget.post.reactions}',
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Color(0xFFFF3B30),
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: -0.1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Spacer(),
+                            // User ID
+                            Row(
+                              children: [
+                                Icon(
+                                  Iconsax.profile_circle,
+                                  size: 18,
+                                  color: const Color(
+                                    0xFF3C3C43,
+                                  ).withOpacity(0.5),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'User ${widget.post.userId}',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: const Color(
+                                      0xFF3C3C43,
+                                    ).withOpacity(0.6),
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: -0.1,
+                                  ),
+                                ),
                               ],
                             ),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: const Color(0xFF007AFF).withOpacity(0.2),
-                              width: 0.5,
-                            ),
-                          ),
-                          child: Text(
-                            '#$tag',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF007AFF),
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-                    ),
-                  const SizedBox(height: 12),
-                  // Footer info
-                  Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              color: Colors.white,
-              child: Row(
-                children: [
-                  // Reactions
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF3B30).withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Iconsax.heart,
-                          size: 18,
-                          color: Color(0xFFFF3B30),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '${widget.post.reactions}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Color(0xFFFF3B30),
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.1,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  // User ID
-                  Row(
-                    children: [
-                      Icon(
-                        Iconsax.profile_circle,
-                        size: 18,
-                        color: const Color(0xFF3C3C43).withOpacity(0.5),
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'User ${widget.post.userId}',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: const Color(0xFF3C3C43).withOpacity(0.6),
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: -0.1,
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-                  ),
-                ],
-              ),
-            ),
+            ],
           ),
+          // Floating reward badge
+          const FloatingRewardBadge(),
         ],
       ),
     );
   }
 }
-
