@@ -21,6 +21,7 @@ class PostDetailScreen extends StatefulWidget {
 class _PostDetailScreenState extends State<PostDetailScreen> {
   final SavedPostsService _savedPostsService = SavedPostsService();
   late bool _isSaved;
+  bool _isToggling = false;
 
   @override
   void initState() {
@@ -42,21 +43,55 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   Future<void> _checkIfSaved() async {
     final savedPosts = _savedPostsService.savedPostsNotifier.value;
+    if (!mounted) return;
     setState(() {
       _isSaved = savedPosts.any((p) => p.id == widget.post.id);
     });
   }
 
   Future<void> _toggleSave() async {
-    if (_isSaved) {
-      await _savedPostsService.removePost(widget.post.id);
-    } else {
-      await _savedPostsService.savePost(widget.post);
-    }
-    if (!mounted) return;
+    // Prevent multiple clicks
+    if (_isToggling) return;
+    
     setState(() {
-      _isSaved = !_isSaved;
+      _isToggling = true;
     });
+
+    try {
+      if (_isSaved) {
+        final success = await _savedPostsService.removePost(widget.post.id);
+        if (success && mounted) {
+          // State will be updated by notifier listener
+          setState(() {
+            _isSaved = false;
+            _isToggling = false;
+          });
+        } else if (mounted) {
+          setState(() {
+            _isToggling = false;
+          });
+        }
+      } else {
+        final success = await _savedPostsService.savePost(widget.post);
+        if (success && mounted) {
+          // State will be updated by notifier listener
+          setState(() {
+            _isSaved = true;
+            _isToggling = false;
+          });
+        } else if (mounted) {
+          setState(() {
+            _isToggling = false;
+          });
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isToggling = false;
+        });
+      }
+    }
   }
 
   @override
@@ -75,12 +110,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              _isSaved ? Iconsax.bookmark_25 : Iconsax.bookmark,
-              color: _isSaved
-                  ? const Color(0xFF007AFF)
-                  : const Color(0xFF3C3C43).withOpacity(0.6),
+              Iconsax.bookmark,
+              color: _isToggling
+                  ? const Color(0xFF3C3C43).withOpacity(0.3)
+                  : _isSaved
+                      ? const Color(0xFF007AFF)
+                      : const Color(0xFF3C3C43).withOpacity(0.6),
             ),
-            onPressed: _toggleSave,
+            onPressed: _isToggling ? null : _toggleSave,
           ),
         ],
         bottom: PreferredSize(
@@ -337,14 +374,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Share functionality
-        },
-        backgroundColor: const Color(0xFF007AFF),
-        elevation: 2,
-        child: const Icon(Iconsax.export_1, color: Colors.white),
       ),
     );
   }

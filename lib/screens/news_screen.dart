@@ -5,6 +5,7 @@ import '../models/post_model.dart';
 import '../services/post_service.dart';
 import '../services/saved_posts_service.dart';
 import '../core/utils/page_transitions.dart';
+import '../widgets/custom_app_bar.dart';
 import 'post_detail_screen.dart';
 
 class NewsScreen extends StatefulWidget {
@@ -108,30 +109,7 @@ class _NewsScreenState extends State<NewsScreen>
     super.build(context); // Required for AutomaticKeepAliveClientMixin
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F7), // iOS systemGray6
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'Báo mới',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 28,
-            letterSpacing: -0.3,
-            color: Color(0xFF000000),
-          ),
-        ),
-        centerTitle: false,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0.5),
-          child: Divider(
-            height: 0.5,
-            thickness: 0.5,
-            color: Colors.black.withOpacity(0.08),
-          ),
-        ),
-      ),
+      appBar: const CustomAppBar(title: 'Báo mới'),
       body: _isLoading
           ? const Center(child: CupertinoActivityIndicator(radius: 12))
           : _errorMessage != null
@@ -399,7 +377,7 @@ class _PostCardState extends State<_PostCard> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Icon(
-                              _isSaved ? Iconsax.bookmark_25 : Iconsax.bookmark,
+                              Iconsax.bookmark,
                               size: 20,
                               color: _isSaved
                                   ? const Color(0xFF007AFF)

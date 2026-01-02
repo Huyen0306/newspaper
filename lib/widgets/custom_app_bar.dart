@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import '../services/points_service.dart';
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final bool showBackButton;
+  final List<Widget>? actions;
+
+  const CustomAppBar({
+    super.key,
+    required this.title,
+    this.showBackButton = false,
+    this.actions,
+  });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(60);
+
+  @override
+  Widget build(BuildContext context) {
+    final pointsService = PointsService();
+    
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
+      leading: showBackButton
+          ? IconButton(
+              icon: const Icon(Iconsax.arrow_left, color: Color(0xFF000000)),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          : null,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // User Avatar
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF007AFF),
+                  Color(0xFF5856D6),
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF007AFF).withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Iconsax.profile_circle,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
+          // Points Card
+          ValueListenableBuilder<int>(
+            valueListenable: pointsService.pointsNotifier,
+            builder: (context, points, child) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFFFFD700).withOpacity(0.2),
+                      const Color(0xFFFFA500).withOpacity(0.2),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: const Color(0xFFFFD700).withOpacity(0.5),
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Iconsax.star1,
+                      size: 16,
+                      color: Color(0xFFFFA500),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '$points',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFFFF8C00),
+                        letterSpacing: -0.2,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      centerTitle: false,
+      actions: actions,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(0.5),
+        child: Divider(
+          height: 0.5,
+          thickness: 0.5,
+          color: Colors.black.withOpacity(0.08),
+        ),
+      ),
+    );
+  }
+}
+

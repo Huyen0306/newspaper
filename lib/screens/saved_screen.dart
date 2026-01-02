@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import '../models/post_model.dart';
 import '../services/saved_posts_service.dart';
 import '../core/utils/page_transitions.dart';
+import '../widgets/custom_app_bar.dart';
 import 'post_detail_screen.dart';
 
 class SavedScreen extends StatefulWidget {
@@ -94,29 +95,8 @@ class _SavedScreenState extends State<SavedScreen>
     super.build(context); // Required for AutomaticKeepAliveClientMixin
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F7),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-        title: const Text(
-          'Đã lưu',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 28,
-            letterSpacing: -0.3,
-            color: Color(0xFF000000),
-          ),
-        ),
-        centerTitle: false,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0.5),
-          child: Divider(
-            height: 0.5,
-            thickness: 0.5,
-            color: Colors.black.withOpacity(0.08),
-          ),
-        ),
+      appBar: const CustomAppBar(
+        title: 'Đã lưu',
       ),
       body: _isLoading
           ? const Center(child: CupertinoActivityIndicator(radius: 12))
