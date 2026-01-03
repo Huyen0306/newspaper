@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:confetti/confetti.dart';
+import 'package:audioplayers/audioplayers.dart';
 import '../../../data/models/reward_model.dart';
 import '../../../data/services/points_service.dart';
 import '../../widgets/custom_app_bar.dart';
@@ -13,10 +15,12 @@ class RewardsScreen extends StatefulWidget {
 }
 
 class _RewardsScreenState extends State<RewardsScreen>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   final PointsService _pointsService = PointsService();
   int _currentPoints = 0;
   bool _isLoading = true;
+  late ConfettiController _confettiController;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   // Sample rewards data - Sản phẩm công nghệ
   final List<RewardModel> _rewards = [
@@ -76,6 +80,9 @@ class _RewardsScreenState extends State<RewardsScreen>
   @override
   void initState() {
     super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
     _loadData();
     _pointsService.pointsNotifier.addListener(_onPointsChanged);
   }
@@ -83,6 +90,8 @@ class _RewardsScreenState extends State<RewardsScreen>
   @override
   void dispose() {
     _pointsService.pointsNotifier.removeListener(_onPointsChanged);
+    _confettiController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -125,22 +134,46 @@ class _RewardsScreenState extends State<RewardsScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: const Text('Xác nhận đổi thưởng'),
         content: Text(
           'Bạn có chắc muốn đổi "${reward.title}" với ${reward.pointsRequired} điểm?',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Hủy'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF007AFF),
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Xác nhận'),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                      color: Color(0xFFFF3B30),
+                      width: 0.5,
+                    ),
+                    foregroundColor: const Color(0xFFFF3B30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  child: const Text('Hủy'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1e293b),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  child: const Text('Xác nhận'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -149,6 +182,14 @@ class _RewardsScreenState extends State<RewardsScreen>
     if (confirmed == true) {
       final success = await _pointsService.addPoints(-reward.pointsRequired);
       if (success && mounted) {
+        // Reset and play confetti
+        _confettiController.stop();
+        _confettiController.play();
+
+        // Play sound
+        _audioPlayer.play(AssetSource('sounds/success.mp3'));
+
+        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Đã đổi thành công: ${reward.title}'),
@@ -166,35 +207,67 @@ class _RewardsScreenState extends State<RewardsScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context); // Required for AutomaticKeepAliveClientMixin
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CustomAppBar(title: 'Đổi thưởng'),
-      body: _isLoading
-          ? const Center(child: CupertinoActivityIndicator(radius: 12))
-          : RefreshIndicator(
-              onRefresh: _loadData,
-              color: const Color(0xFF007AFF),
-              strokeWidth: 2.5,
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                children: [
-                  // Rewards Section
-                  ..._rewards.map(
-                    (reward) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _RewardCard(
-                        reward: reward,
-                        currentPoints: _currentPoints,
-                        onRedeem: () => _redeemReward(reward),
-                      ),
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: Colors.white,
+          appBar: const CustomAppBar(title: 'Đổi thưởng'),
+          body: _isLoading
+              ? const Center(child: CupertinoActivityIndicator(radius: 12))
+              : RefreshIndicator(
+                  onRefresh: _loadData,
+                  color: const Color(0xFF007AFF),
+                  strokeWidth: 2.5,
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
+                    children: [
+                      // Rewards Section
+                      ..._rewards.map(
+                        (reward) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _RewardCard(
+                            reward: reward,
+                            currentPoints: _currentPoints,
+                            onRedeem: () => _redeemReward(reward),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+        ),
+        // Confetti Widget
+        Align(
+          alignment: Alignment.topCenter,
+          child: ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            colors: const [
+              Colors.green,
+              Colors.blue,
+              Colors.pink,
+              Colors.orange,
+              Colors.purple,
+              Colors.yellow,
+              Colors.cyan,
+              Colors.red,
+              Colors.indigo,
+              Colors.amber,
+              Colors.lightBlue,
+              Colors.teal,
+            ],
+            minimumSize: const Size(10, 10),
+            maximumSize: const Size(25, 25),
+            numberOfParticles: 100,
+            gravity: 0.2,
+            emissionFrequency: 0.05,
+          ),
+        ),
+      ],
     );
   }
 }

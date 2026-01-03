@@ -117,14 +117,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             onPressed: _isToggling ? null : _toggleSave,
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0.5),
-          child: Divider(
-            height: 0.5,
-            thickness: 0.5,
-            color: Colors.black.withOpacity(0.08),
-          ),
-        ),
       ),
       body: Stack(
         children: [
@@ -232,9 +224,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 1),
-                      const Divider(height: 1),
-                      const SizedBox(height: 1),
+                      const SizedBox(height: 12),
                       // Body content
                       Container(
                         width: double.infinity,
@@ -292,12 +282,6 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: const Color(
-                                          0xFF007AFF,
-                                        ).withOpacity(0.2),
-                                        width: 0.5,
-                                      ),
                                     ),
                                     child: Text(
                                       '#$tag',

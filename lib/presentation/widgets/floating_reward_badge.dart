@@ -191,8 +191,8 @@ class _FloatingRewardBadgeState extends State<FloatingRewardBadge>
                   width: 130,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.85),
-                    borderRadius: BorderRadius.circular(24),
+                    color: const Color(0xFF1e293b),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.4),
@@ -229,7 +229,7 @@ class _FloatingRewardBadgeState extends State<FloatingRewardBadge>
                                 CircularProgressIndicator(
                                   value: 1.0 - _progressController.value,
                                   strokeWidth: 6,
-                                  color: const Color(0xFFFFD700),
+                                  color: Colors.white,
                                   strokeCap: StrokeCap.round,
                                 ),
                                 // Time text in center
@@ -261,7 +261,7 @@ class _FloatingRewardBadgeState extends State<FloatingRewardBadge>
                           gradient: const LinearGradient(
                             colors: [Color(0xFFCC0000), Color(0xFF8B0000)],
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           '$_displaySeconds giây nữa',
