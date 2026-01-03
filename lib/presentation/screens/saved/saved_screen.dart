@@ -94,7 +94,7 @@ class _SavedScreenState extends State<SavedScreen>
   Widget build(BuildContext context) {
     super.build(context); // Required for AutomaticKeepAliveClientMixin
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F7),
+      backgroundColor: Colors.white,
       appBar: const CustomAppBar(title: 'Đã lưu'),
       body: _isLoading
           ? const Center(child: CupertinoActivityIndicator(radius: 12))

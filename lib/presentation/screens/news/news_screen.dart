@@ -108,7 +108,7 @@ class _NewsScreenState extends State<NewsScreen>
   Widget build(BuildContext context) {
     super.build(context); // Required for AutomaticKeepAliveClientMixin
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F7), // iOS systemGray6
+      backgroundColor: Colors.white, // iOS systemGray6
       appBar: const CustomAppBar(title: 'Báo mới'),
       body: Stack(
         children: [
@@ -284,14 +284,8 @@ class _PostCardState extends State<_PostCard> {
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: Colors.grey.withOpacity(0.5), width: 0.5),
       ),
       child: Material(
         color: Colors.transparent,
@@ -313,7 +307,7 @@ class _PostCardState extends State<_PostCard> {
                 tag: 'news_post_image_${post.id}',
                 child: ClipRRect(
                   borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(12),
+                    top: Radius.circular(18),
                   ),
                   child: SizedBox(
                     height: 200,

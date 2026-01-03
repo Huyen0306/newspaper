@@ -148,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   Widget build(BuildContext context) {
     super.build(context); // Required for AutomaticKeepAliveClientMixin
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F7),
+      backgroundColor: Colors.white,
       appBar: const CustomAppBar(title: 'Profile'),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
