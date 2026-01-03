@@ -122,38 +122,45 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             builder: (context, points, child) {
               return Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+                  horizontal: 14,
+                  vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      const Color(0xFFFFD700).withOpacity(0.2),
-                      const Color(0xFFFFA500).withOpacity(0.2),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: const Color(0xFFFFD700).withOpacity(0.5),
-                    width: 1,
-                  ),
+                  color: const Color(0xFF1e293b),
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
-                      Iconsax.star1,
-                      size: 16,
-                      color: Color(0xFFFFA500),
+                    Container(
+                      width: 22,
+                      height: 22,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFA500).withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Icon(
+                        Iconsax.star1,
+                        size: 14,
+                        color: Color(0xFFFFA500),
+                      ),
                     ),
-                    const SizedBox(width: 6),
+                    const SizedBox(width: 8),
                     Text(
                       '$points',
                       style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFFFF8C00),
-                        letterSpacing: -0.2,
+                        color: Colors.white,
+                        letterSpacing: -0.3,
                       ),
                     ),
                   ],

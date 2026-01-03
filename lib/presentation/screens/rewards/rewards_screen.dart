@@ -18,49 +18,55 @@ class _RewardsScreenState extends State<RewardsScreen>
   int _currentPoints = 0;
   bool _isLoading = true;
 
-  // Sample rewards data
+  // Sample rewards data - Sản phẩm công nghệ
   final List<RewardModel> _rewards = [
     RewardModel(
       id: 1,
-      title: 'Voucher 50K',
-      description: 'Giảm 50.000đ cho đơn hàng tiếp theo',
-      pointsRequired: 100,
-      icon: 'voucher',
+      title: 'AirPods Pro',
+      description: 'Tai nghe không dây chống ồn chủ động',
+      pointsRequired: 500,
+      icon: 'airpods',
+      imageUrl: 'assets/images/airpods.png',
     ),
     RewardModel(
       id: 2,
-      title: 'Voucher 100K',
-      description: 'Giảm 100.000đ cho đơn hàng tiếp theo',
-      pointsRequired: 200,
-      icon: 'voucher',
+      title: 'iPhone 15',
+      description: 'Điện thoại thông minh flagship mới nhất',
+      pointsRequired: 2000,
+      icon: 'iphone15',
+      imageUrl: 'assets/images/iphone15.png',
     ),
     RewardModel(
       id: 3,
-      title: 'Voucher 200K',
-      description: 'Giảm 200.000đ cho đơn hàng tiếp theo',
-      pointsRequired: 400,
-      icon: 'voucher',
+      title: 'MacBook Air M2',
+      description: 'Laptop siêu mỏng nhẹ hiệu năng cao',
+      pointsRequired: 3000,
+      icon: 'macbook',
+      imageUrl: 'assets/images/macbook.png',
     ),
     RewardModel(
       id: 4,
-      title: 'Miễn phí vận chuyển',
-      description: 'Miễn phí ship cho đơn hàng tiếp theo',
-      pointsRequired: 50,
-      icon: 'shipping',
+      title: 'iPad Pro',
+      description: 'Máy tính bảng chuyên nghiệp',
+      pointsRequired: 2500,
+      icon: 'ipad_pro',
+      imageUrl: 'assets/images/iPad_Pro.png',
     ),
     RewardModel(
       id: 5,
-      title: 'Tặng kèm quà',
-      description: 'Nhận quà tặng kèm khi mua hàng',
-      pointsRequired: 150,
-      icon: 'gift',
+      title: 'Apple Watch Series 9',
+      description: 'Đồng hồ thông minh cao cấp',
+      pointsRequired: 1500,
+      icon: 'apple_watch',
+      imageUrl: 'assets/images/Apple_Watch.png',
     ),
     RewardModel(
       id: 6,
-      title: 'Ưu đãi đặc biệt',
-      description: 'Giảm 30% cho tất cả sản phẩm',
-      pointsRequired: 300,
-      icon: 'discount',
+      title: 'Magic Keyboard',
+      description: 'Bàn phím không dây đa năng',
+      pointsRequired: 800,
+      icon: 'keyboard',
+      imageUrl: 'assets/images/keyboard.png',
     ),
   ];
 
@@ -213,137 +219,150 @@ class _RewardCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: Colors.grey.withOpacity(0.5), width: 0.5),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: canRedeem ? onRedeem : null,
           borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                // Icon
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: canRedeem
-                          ? [const Color(0xFF007AFF), const Color(0xFF5856D6)]
-                          : [
-                              const Color(0xFF3C3C43).withOpacity(0.2),
-                              const Color(0xFF3C3C43).withOpacity(0.1),
-                            ],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    _getIconData(reward.icon),
-                    color: canRedeem
-                        ? Colors.white
-                        : const Color(0xFF3C3C43).withOpacity(0.5),
-                    size: 28,
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Image - Full width
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
                 ),
-                const SizedBox(width: 16),
-                // Content
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        reward.title,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+                child: Container(
+                  width: double.infinity,
+                  height: 200,
+                  color: Colors.white,
+                  child: Image.asset(
+                    reward.imageUrl ?? 'assets/images/macbook.png',
+                    width: double.infinity,
+                    height: 200,
+                    fit: BoxFit.cover,
+                    cacheWidth: 800,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: canRedeem
+                                ? [
+                                    const Color(0xFF007AFF),
+                                    const Color(0xFF5856D6),
+                                  ]
+                                : [
+                                    const Color(0xFF3C3C43).withOpacity(0.2),
+                                    const Color(0xFF3C3C43).withOpacity(0.1),
+                                  ],
+                          ),
+                        ),
+                        child: Icon(
+                          _getIconData(reward.icon),
                           color: canRedeem
-                              ? const Color(0xFF1C1C1E)
-                              : const Color(0xFF3C3C43).withOpacity(0.6),
-                          letterSpacing: -0.3,
+                              ? Colors.white
+                              : const Color(0xFF3C3C43).withOpacity(0.5),
+                          size: 48,
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        reward.description,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: const Color(0xFF3C3C43).withOpacity(0.7),
-                          height: 1.4,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Points
-                      Row(
-                        children: [
-                          Icon(
-                            Iconsax.star1,
-                            size: 14,
-                            color: canRedeem
-                                ? const Color(0xFFFFA500)
-                                : const Color(0xFF3C3C43).withOpacity(0.4),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '${reward.pointsRequired} điểm',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: canRedeem
-                                  ? const Color(0xFFFF8C00)
-                                  : const Color(0xFF3C3C43).withOpacity(0.5),
-                            ),
-                          ),
-                          if (!canRedeem) ...[
-                            const SizedBox(width: 8),
-                            Text(
-                              '(Thiếu ${reward.pointsRequired - currentPoints} điểm)',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: const Color(0xFFFF3B30).withOpacity(0.7),
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
-                // Redeem button
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: canRedeem
-                        ? const LinearGradient(
-                            colors: [Color(0xFF007AFF), Color(0xFF5856D6)],
-                          )
-                        : null,
-                    color: canRedeem ? null : const Color(0xFFF2F2F7),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    'Đổi',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: canRedeem
-                          ? Colors.white
-                          : const Color(0xFF3C3C43).withOpacity(0.4),
+              ),
+              // Content
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      reward.title,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: canRedeem
+                            ? const Color(0xFF1C1C1E)
+                            : const Color(0xFF3C3C43).withOpacity(0.6),
+                        letterSpacing: -0.3,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 4),
+                    Text(
+                      reward.description,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: const Color(0xFF3C3C43).withOpacity(0.7),
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Points
+                    Row(
+                      children: [
+                        Icon(
+                          Iconsax.star1,
+                          size: 14,
+                          color: canRedeem
+                              ? const Color(0xFFFFA500)
+                              : const Color(0xFF3C3C43).withOpacity(0.4),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${reward.pointsRequired} điểm',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: canRedeem
+                                ? const Color(0xFFFF8C00)
+                                : const Color(0xFF3C3C43).withOpacity(0.5),
+                          ),
+                        ),
+                        if (!canRedeem) ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            '(Thiếu ${reward.pointsRequired - currentPoints} điểm)',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: const Color(0xFFFF3B30).withOpacity(0.7),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Redeem button
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: canRedeem
+                            ? const Color(0xFF1e293b)
+                            : const Color(0xFF1e293b).withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        'Đổi thưởng',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: canRedeem
+                              ? Colors.white
+                              : Colors.white.withOpacity(0.5),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -352,14 +371,18 @@ class _RewardCard extends StatelessWidget {
 
   IconData _getIconData(String icon) {
     switch (icon) {
-      case 'voucher':
-        return Iconsax.discount_shape;
-      case 'shipping':
-        return Iconsax.truck;
-      case 'gift':
-        return Iconsax.gift;
-      case 'discount':
-        return Iconsax.tag;
+      case 'airpods':
+        return Iconsax.headphone;
+      case 'iphone15':
+        return Iconsax.mobile;
+      case 'macbook':
+        return Iconsax.monitor;
+      case 'ipad_pro':
+        return Iconsax.mobile;
+      case 'apple_watch':
+        return Iconsax.watch;
+      case 'keyboard':
+        return Iconsax.keyboard;
       default:
         return Iconsax.gift;
     }

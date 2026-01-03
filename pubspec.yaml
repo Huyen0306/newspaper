@@ -61,6 +61,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/sounds/success.mp3
+    - assets/images/airpods.png
+    - assets/images/iphone15.png
+    - assets/images/macbook.png
+    - assets/images/iPad_Pro.png
+    - assets/images/Apple_Watch.png
+    - assets/images/keyboard.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

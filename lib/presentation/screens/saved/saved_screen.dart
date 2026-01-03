@@ -160,6 +160,7 @@ class _SavedPostCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.withOpacity(0.5), width: 0.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.03),
