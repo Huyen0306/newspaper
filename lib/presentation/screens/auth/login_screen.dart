@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F7),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -148,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
-                      color: Color(0xFF007AFF),
+                      color: Color(0xFF1e293b),
                       width: 1.5,
                     ),
                   ),
@@ -207,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
-                      color: Color(0xFF007AFF),
+                      color: Color(0xFF1e293b),
                       width: 1.5,
                     ),
                   ),
@@ -222,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 24,
                     child: Checkbox(
                       value: _rememberMe,
-                      activeColor: const Color(0xFF007AFF),
+                      activeColor: const Color(0xFF1e293b),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -255,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF007AFF),
+                        color: Color(0xFF1e293b),
                       ),
                     ),
                   ),
@@ -269,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _login,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF007AFF),
+                    backgroundColor: const Color(0xFF1e293b),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -336,7 +336,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF007AFF),
+                        color: Color(0xFF1e293b),
                       ),
                     ),
                   ),
